@@ -1,0 +1,621 @@
+create table client_master
+(c_no varchar(4) primary key,
+ c_name varchar(20) not null,
+ pincode number(6),
+ birht_date date,
+ occupation varchar(15) not null,
+ CONSTRAINT ck_cno CHECK(c_no like 'c%')
+);
+create table product_master
+(p_no varchar(4) primary key,
+ p_name varchar(20) not null,
+ p_profit  number(5),
+ p_unit varchar(5),
+ p_qty number(3),
+ p_sell number(5),
+ p_cost number(5),
+ CONSTRAINT ck_pno CHECK(p_no like 'p%'),
+ CONSTRAINT ck_p_qty CHECK(P_qty <> 0),
+ CONSTRAINT ck_p_cost CHECK(p_cost<> 0),
+ CONSTRAINT ck_p_sell CHECK(P_sell <> 0) 
+);
+create table salesman_master
+(s_no varchar(4) primary key,
+ s_name varchar(20) not null,
+ s_add1 varchar(25),
+ s_add2 varchar(25), 
+ s_city varchar(10),
+ s_pin number(6),
+ s_state varchar(10),
+ s_salary number(10),
+ s_target number(5),
+ s_sale number(5),
+ CONSTRAINT ck_s_no CHECK(s_no like 's%'),
+ CONSTRAINT ck_s_salary CHECK(s_salary <> 0),
+ CONSTRAINT ck_s_s_sale CHECK(s_sale> 0));
+create table sales_order
+(o_no varchar(4) primary key,
+ client_no varchar(4) references client_master (c_no),
+ order_date date,
+ salesman_no varchar(4) references salesman_master(s_no),
+ delivery_type char,
+ bill_paid char,
+ delivery_date date,
+ order_status varchar(10),
+ CONSTRAINT ck_order_status CHECK (order_status in('IN PROCESS','PENDING','FULLFIELD')),
+ CONSTRAINT ck_ono CHECK(o_no like 'o%'), 
+ CONSTRAINT ck_delivery_type CHECK(delivery_type in('F','P'))
+);
+create table sales_order_detail
+(
+order_no varchar(4) references sales_order(o_no),
+product_no varchar(4) references product_master(p_no),
+qty_ordered number(4),
+qty_dispatched number(4),
+product_rate number(4) not null,
+CONSTRAINT ck_qty_order CHECK(qty_ordered >0),
+CONSTRAINT ck_qty_dispatched CHECK(qty_dispatched >0)
+);
+insert into client_master values('c001','kajal oza',38006,'14-jul-1987','Manager');
+insert into client_master values('c002','shreya oza',380456,'14-jul-1980','CEO');
+insert into client_master values('c003','kalpesh oza',380036,'14-jul-1987','Doctor');
+insert into client_master values('c004','mahesh oza',380036,'14-jul-1987','Professor');
+insert into client_master values('c005','kajal oza',380036,'14-jul-1987','Clerk');
+insert into product_master values('p001','T-shirt',6,'piece',200,350,250);
+insert into product_master values('p002','Paint',2,'piece',100,350,450);
+insert into product_master values('p003','Shirt',8,'piece',300,350,550);
+insert into product_master values('p004','jins',10,'piece',100,350,250);
+insert into product_master values('p005','Hoody',6,'piece',50,350,150);
+insert into salesman_master values('s001','Aman','3 dev app','vaghodia','barod',2001,'gujrat',5000,100,50);
+insert into salesman_master values('s002','Ram','4 dev app','vaghodia','ahmedabad',2001,'gujrat',5000,100,50);
+insert into salesman_master values('s003','shyam','1 prit app','karmcharinagar','katch',380061,'gujrat',5000,100,100);
+insert into salesman_master values('s004','Ghnshyam','ghatlodia','chandlodia','gova',2001,'gujrat',3062,50,50);
+insert into salesman_master values('s005','krishn','3 rohitnagar','vaghodia','ghinagar',2001,'gujrat',384001,100,20);
+insert into sales_order values('o001','c002','12-feb-2000','s001','F','Y','14-feb-2000','IN PROCESS');
+insert into sales_order values('o002','c001','16-mar-2000','s002','P','N','20-mar-2000','FULLFIELD');
+insert into sales_order values('o003','c005','22-apr-2000','s005','P','Y','28-apr-2000','PENDING');
+insert into sales_order values('o004','c001','21-jun-2000','s005','F','N','22-jun-2000','PENDING');
+insert into sales_order values('o005','c002','12-sep-2000','s001','P','Y','14-sep-2000','IN PROCESS');
+insert into sales_order_detail values('o001','p003',2,4,20);
+insert into sales_order_detail values('o001','p001',4,4,20);
+insert into sales_order_detail values('o002','p005',1,4,30);
+insert into sales_order_detail values('o001','p001',2,8,10);
+insert into sales_order_detail values('o002','p004',3,10,50);
+
+                         ----------------------------Day-3-------------------------
+
+create table client1 as select c_no,c_name,pincode,birht_date ,occupation from client_master;
+create table client1 as select * from client_master;	
+
+insert into client select * from client_master;
+
+create table product1 as select * from product_master;
+
+insert into client select * from client_master where c_no='c001';
+
+create table salesman as select s_no,s_name,s_add1,s_city,s_target from salesman_master;
+
+//create table salesman1 as select * from salesman_master;
+
+insert into salesman1 select * from salesman_master;
+
+create table order_master as select * from sales_order;
+
+insert into order_master select * from sales_order where client_no='c001';
+
+create table order_detail as select *from sales_order_detail; 
+
+insert into order_detail select* from sales_order_detail where order_no='o001'; 
+
+truncate table sales_order_detail;
+truncate table sales_order;
+truncate table salesman_master;
+truncate table product_master;
+truncate table client_master;
+
+drop table sales_order_detail;
+drop table sales_order;
+drop table salesman_master;
+drop table product_master;
+drop table client_master;
+
+//-------------------------------day4---------------------------
+alter table product_master drop column p_name;
+create table sales_order1 as select * from sales_order;
+insert into sales_order1 select * from sales_order;//wrong...........
+
+1.delete from product_master;
+2.delete from sales_order_detail where order_no='o001';
+3.update sales_order set order_status='FULLFIELD' where order_status='IN PROCESS';
+4.alter table client_master add (city varchar(10),state varchar(10));
+
+//this is anothe query
+insert into client_master values ('c006','ck',380061,'14-jul-1987','Manager','banglore','guj');
+//
+
+5.insert into client_master values ('c007','kp',380061,'14-jul-1987','Manager','ahmedabad','surat');
+6.update client_master set city='chennai' where city='banglore';
+7.update product_master set p_cost=250 where p_cost=150;
+8.update product_master set p_cost=p_cost+20 where p_profit=6;
+9.delete from salesman_master where s_salary >5000;
+10.delete from product_master where p_qty <200;
+11.alter table client_master add(mob_no varchar(10));
+12.rename salesman_master to SMAN_Mst;
+
+
+---------------------day5---------------------------------
+
+create table client2 (c_no number(10) primary key,c_age number(3));
+insert into client2 values(1,22);
+insert into client2 values(2,26);
+insert into client2 values(3,28);
+insert into client2 values(4,52);
+insert into client2 values(5,52);
+insert into client2 values(6,29);
+
+1.select c_age from  client2 where c_age>25 AND c_age<50;
+2.select s_name from salesman_master where s_sale>s_target AND s_target>100;
+3.select s_name from salesman_master where s_city not in('barod','surat');
+4.select count(c_no) from client_master;
+5.select max(s_salary) from salesman_master;
+6.select upper(p_name )from product_master;
+7.select sysdate from dual;
+8.select avg(s_target) from salesman_master;
+//
+insert into client_master values('c001','kajal oza',38006,to_date('12-31-2001','mm-dd-yyyy'),'Manager''banglore','guj''1234567890');
+wrong
+
+create table data( year date);
+insert into data values(to_date('12-31-2001','mm-dd-yyyy'));
+
+//
+9. select to_char(year,'mm/dd/yyyy') from data; 
+10.select to_date(year,'dd-month-yy') from data;
+11.select to_char (year,'dd/mm') from data; OR
+//select to_char (year,'dd/mm/yyyy') from data;
+//select to_char (year,'mm/dd/yyyy') from data;
+
+
+//select to_date(year,'mm/dd/yyyy') from data;//   wrong
+
+
+--------------------------day-6------------------------------------
+
+create table applicant_(
+a_id number(4) primary key,
+a_name varchar(20),
+a_city varchar(10),
+a_birth_date date
+);
+
+create table entrance_test(
+et_id number(4) primary key,
+et_name varchar(20),
+et_max_score number(3)
+);
+
+//  drop table 
+
+create table etest_details(
+etd_a_id number(4) references applicant(a_id),
+etd_et_id number(4) references entrance_test(et_id),
+etd_test_date date,
+etd_score number(3)
+);
+
+
+insert into applicant values (1,'ck','ahmedabad','10-jan-2016');
+insert into applicant values (2,'kp','surat','20-feb-2016');
+insert into applicant values (3,'nidhi','rajkot','30-jun-2016');
+insert into applicant values (4,'jai','vadodara','23-jul-2016');
+insert into  applicant values (5,'viru','katch','24-oct-2016');
+
+insert into applicant values (6,'ck','ahmedabad','10-jan-2016');
+insert into applicant values (7,'kp','surat','20-feb-2016');
+insert into applicant values (8,'nidhi','rajkot','30-jun-2016');
+insert into applicant values (9,'jai','vadodara','23-jul-2016');
+insert into  applicant values (10,'viru','katch','24-oct-2016');
+
+
+insert into entrance_test values (1,'NEET',700);
+insert into entrance_test values (2,'CMAT',500);
+insert into entrance_test values (3,'JEE',700);
+insert into entrance_test values (4,'CAT',500);
+insert into  entrance_test values (5,'SAT',500);
+
+
+insert into etest_details values (1,1,'20-feb-2016',450);
+insert into etest_details values (1,2,'20-mar-2016',300);
+insert into etest_details values (5,3,'30-jun-2016',600);
+insert into etest_details values (2,3,'23-jul-2016',650);
+insert into  etest_details values (5,5,'24-oct-2016',348);
+insert into etest_details values (1,3,'20-feb-2016',450);
+insert into etest_details values (1,4,'20-mar-2016',300);
+insert into etest_details values (1,5,'30-jun-2016',600);
+insert into etest_details values (2,3,'23-jul-2016',650);
+insert into  etest_details values (5,5,'24-oct-2016',348);
+
+insert into etest_details values (3,5,'30-jun-2016',600);
+insert into etest_details values (3,3,'23-jul-2016',650);
+insert into  etest_details values (3,1,'24-oct-2016',348);
+insert into etest_details values (3,2,'30-jun-2016',600);
+insert into etest_details values (3,4,'23-jul-2016',650);
+insert into  etest_details values (5,1,'24-oct-2016',348);
+
+
+
+truncate table etest_details ;
+
+1. select count(*),etd_a_id from etest_details  group by etd_a_id;
+Or
+1.select count(etd_a_id),etd_et_id from etest_details group by etd_et_id;
+
+//select count(etd_a_id),etd_et_id from etest_details group by etd_et_id having count(etd_a_id) > 1;
+2.select max(etd_score ),etd_et_id from etest_details group by etd_et_id;
+3.select count(etd_a_id),etd_et_id from etest_details group by etd_et_id having count(etd_a_id) > 1;
+4.select etd_a_id,avg(etd_score ) from etest_details group by etd_a_id;
+5.select count(a_id),a_city from applicant group by a_city;
+6.select avg(etd_score),etd_et_id from etest_details group by etd_et_id having avg(etd_score)>50;
+//select etd_et_id,avg(etd_score) from etest_details group by etd_et_id having avg(etd_score)>50;
+7.select count(etd_et_id),etd_test_date  from etest_details group by etd_test_date ;
+//select count(etd_test_date),etd_et_id  from etest_details group by etd_et_id  ;
+
+create table distributer(
+d_id number(4) primary key,
+d_name varchar(20),
+d_city varchar(10),
+d_mob varchar(10)
+);
+
+create table item(
+i_id number(4) primary key,
+i_name varchar(20),
+i_price number(6),
+i_weight number(10)
+);
+
+create table dist_item(
+di_d_id number(4) references distributer(d_id),
+di_i_id number(4) references item(i_id),
+di_qty number(3) ,
+di_date date
+);
+
+insert into distributer values (1,'ck','ahmedabad','8866591125');
+insert into distributer values (2,'kp','surat','9537787827');
+insert into distributer values (3,'nidhi','rajkot','12345678');
+insert into distributer values (4,'jai','vadodara','1234509876');
+insert into  distributer values (5,'viru','katch','234517890');
+insert into distributer values (6,'pk','ahmedabad','9078563412');
+insert into distributer values (7,'jinu','surat','8866458110');
+insert into distributer values (8,'rinkal','rajkot','9998123465');
+insert into distributer values (9,'jainish','vadodara','3456271890');
+insert into  distributer values (10,'virum','katch','9090123465');
+
+insert into item  values (1,'shirt',150,200);
+insert into item  values (2,'paint',250,200);
+insert into item  values (3,'hoddy',550,300);
+insert into item  values (4,'jins',350,200);
+insert into item  values (5,'funky',400,500);
+
+insert into dist_item  values (1,1,2,'12-jan-2001');
+insert into dist_item  values (1,5,2,'12-jan-2001');
+insert into dist_item  values (2,1,3,'18-feb-2001');
+insert into dist_item  values (9,3,10,'12-mar-2001');
+insert into dist_item  values (1,3,10,'20-mar-2001');
+insert into dist_item  values (3,4,5,'11-jun-2001');
+insert into dist_item  values (3,2,2,'12-jun-2001');
+insert into dist_item  values (3,1,2,'12-jun-2001');
+insert into dist_item  values (3,5,5,'15-jun-2001');
+insert into dist_item  values (4,2,2,'15-jun-2001');
+insert into dist_item  values (4,1,12,'16-jun-2001');
+insert into dist_item  values (5,1,2,'16-jun-2001');
+insert into dist_item  values (6,3,14,'20-aug-2001');
+insert into dist_item  values (6,2,10,'21-aug-2001');
+insert into dist_item  values (6,3,14,'20-aug-2001');
+insert into dist_item  values (7,3,14,'20-aug-2001');
+insert into dist_item  values (8,3,3,'25-aug-2001');
+insert into dist_item  values (8,1,1,'26-aug-2001');
+insert into dist_item  values (9,3,10,'28-aug-2001');
+insert into dist_item  values (10,3,14,'30-jan-2002');
+insert into dist_item  values (10,1,2,'2-oct-2002');
+insert into dist_item  values (10,2,10,'5-nov-2002');
+
+1.select count(d_id),d_city from distributer group by d_city;
+//select di_i_id "distributed item id",count(di_d_id)"count of item distribute" from dist_item  group by di_i_id;
+//select di_qty ,count(di_i_id ) from dist_item group by di_qty;
+//select di_qty ,count(di_i_id ) from dist_item group by di_qty having di_qty>2;
+//select di_qty ,count(di_i_id ) from dist_item group by di_qty having di_qty>2 OR di_date like '12-jan-2001'------------wrong;
+
+2.
+\\select di_d_id,to_char(di_date,'month'),count(di_qty) from dist_item group by  di_d_id,di_date, to_char(di_date,'month') like 'august'--wrong;
+\\select di_d_id,to_char(di_date,'mm'),count(di_qty) from dist_item group by  di_d_id,di_date having count(di_qty)>1;
+\\select di_d_id,to_char(di_date,'month'),count(di_qty) from dist_item group by  di_d_id,di_date having count(di_qty)>1;
+\\select di_d_id,to_char(di_date,'month'),count(di_qty) from dist_item group by  di_d_id,di_date;
+\\select di_qty ,count(di_i_id ) from dist_item group by di_qty having di_qty>2;
+\\select di_i_id, count(di_qty) from dist_item group by di_i_id having count(di_qty)>2 ;
+\\select di_i_id, count(di_qty) from dist_item group by di_i_id;
+3.select di_i_id, count(di_qty) from dist_item group by di_i_id having count(di_qty)>2 ;
+
+4.select di_d_id,to_char(di_date,'month'),sum(di_qty) from dist_item group by  di_d_id,di_date;
+
+
+//select to_char(di_date,'month'),sum(di_qty) from dist_item group by  di_date(di_date,'month');
+//select di_d_id,di_date,count(di_qty) from dist_item group by  di_d_id,di_date having count(di_qty)>1;
+//select di_d_id,di_date,count(di_qty) from dist_item group by  di_d_id,di_date;
+//select di_d_id,count(di_qty) from dist_item group by  di_d_id;
+//select di_d_id,di_date,count(di_qty) from dist_item group by di_date, di_d_id having count(di_qty) >2;
+//select di_d_id,count(di_date),di_date,count(di_qty) from dist_item group by  di_d_id,di_date having count(di_qty)>1;
+//select di_d_id,di_date,count(di_qty) from dist_item group by  di_d_id,di_date having count(di_qty)>1;
+
+5.select * from dist_item order by i_price desc,order by i_weith;
+//select i_price ,count(i_name) from item group by i_price;
+//select i_price ,count(i_name) from item group by i_price order by i_price desc;
+//select i_price ,count(i_name) from item group by i_price order by i_price desc;
+//select * from item order by i_price OR order by i_weight--------wrong;
+//select i_id from  item order by i_id;
+//select i_id from  item order by i_price asc;
+//select i_id from  item order by i_price desc;
+//
+
+6.select d_city ,d_name from distributer order by d_city,d_name;
+
+//select d_id from distributer order by d_city OR d_name;
+//select d_id from distributer order by d_city;
+//select d_city ,d_name from distributer order by d_city,d_name;
+
+7.select avg(di_qty),di_date from dist_item group by di_date;
+
+
+8.select i_weight ,avg(i_price) from item group by i_weight;
+
+-------------------------------------------day7---------------------------
+create table student(rno number(4) primary key,fname varchar(20),lname varchar(10),dob date);
+create table course(cno number(4) ,srno number(4) references student(rno),cfess number(10),cname varchar(20),cmax_mark number(4),cpass_mark number(4));
+
+//-----------insert into student table 
+
+insert into student values(1,'ck','pal','10-may-2000');
+insert into student values(2,'kp','prajapat','1-apr-2001');
+insert into student values(3,'vn','nayi','10-jan-2000');
+insert into student values(4,'vr','rathod','21-mar-2000');
+insert into student values(5,'pinkey','mina','22-feb-2010');
+insert into student values(6,'ramesh','pal','25-mar-2001');
+insert into student values(7,'rj','shyam','18-may-1999');
+
+
+//------insert into course
+insert into course values(1,1,200000,'MCA',700,250);
+insert into course values(2,1,200000,'MCA',1000,330);
+insert into course values(3,1,200000,'MCA',500,170);
+insert into course values(4,1,200000,'MCA',700,250);
+insert into course values(5,1,200000,'MCA',800,300);
+insert into course values(1,2,200000,'MCA',700,550);
+insert into course values(2,2,200000,'MCA',1000,730);
+insert into course values(3,2,200000,'MCA',500,190);
+insert into course values(1,3,200000,'MCA',700,360);
+insert into course values(2,3,200000,'MCA',1000,830);
+insert into course values(1,4,200000,'MCA',700,200);
+insert into course values(2,4,200000,'MCA',1000,300);
+insert into course values(3,4,200000,'MCA',500,290);
+insert into course values(4,4,200000,'MCA',700,270);
+insert into course values(5,5,200000,'MCA',800,300);
+insert into course values(1,5,200000,'MCA',700,400);
+insert into course values(2,5,200000,'MCA',1000,730);
+insert into course values(3,5,200000,'MCA',500,400);
+insert into course values(4,5,200000,'MCA',700,670);
+
+1.select srno from course where cpass_mark>(select avg(cpass_mark) from course );
+2.
+select * from course where cpass_mark in((
+select cpass_mark from course where srno=
+(select rno from student where fname='ck'))
+ )AND srno <>1;
+
+3. select rno,fname from student where rno in( (select srno from course where cno=5));
+4.select rno from student where rno not in ((select distinct(srno) from course));
+5.update course set cmax_mark=80 where cno =2; 
+6.delete from course where cpass_mark<250;
+7.select max(cnt) from (select count(*) cnt from course group by cno)t;
+select cno ,count(srno) from course group by cno;
+
+
+8.select fname,lname from student where rno in(select srno from course where cno=3);
+
+create table employee(e_no number(5) primary key,e_fname varchar(10),e_lname varchar(10),e_dob date,e_add varchar(25));
+
+create table company(c_no number(5) primary key,e_no number(5) references employee(e_no),c_name varchar(10),c_salary number(10),c_dept varchar(25),c_designation varchar(10));
+
+create table customer(c_no number(10) primary key,c_fname varchar(10),c_lname varchar(10),c_add varchar(25));
+
+
+--------------------day-8-------------------------
+
+
+create table applicant(
+a_id number(4) primary key,
+a_name varchar(20),
+a_city varchar(10),
+a_birth_date date
+);
+
+create table entrance_test(
+et_id number(4) primary key,
+et_name varchar(20),
+et_max_score number(3)
+);
+
+//  drop table 
+
+create table etest_details(
+etd_a_id number(4) references applicant(a_id),
+etd_et_id number(4) references entrance_test(et_id),
+etd_test_date date,
+etd_score number(3)
+);
+
+1.select applicant.a_id,max(etest_details.etd_score) from applicant join etest_details on
+etest_details.etd_a_id= applicant.a_id group by applicant.a_id;
+
+2.select applicant.a_id,count(etest_details.etd_a_id) from applicant join etest_details on 
+etest_details.etd_a_id=applicant.a_id group by applicant.a_id;
+
+
+3.
+select min(etd_et_id) from etest_details;
+
+
+4.select  applicant.a_city,count(etest_details.etd_a_id)  from applicant JOIN etest_details
+on etest_details.etd_a_id= applicant.a_id group by applicant.a_city;
+
+5.select * from etest_details join applicant on applicant.a_id =etest_details.etd_a_id 
+where 
+etd_a_id in((select a_id from applicant where a_name like 'ck'));
+
+
+----------------------------second-----------------------------
+
+create table distributer(
+d_id number(4) primary key,
+d_name varchar(20),
+d_city varchar(10),
+d_mob varchar(10)
+);
+
+create table item(
+i_id number(4) primary key,
+i_name varchar(20),
+i_price number(6),
+i_weight number(10)
+);
+
+create table dist_item(
+di_d_id number(4) references distributer(d_id),
+di_i_id number(4) references item(i_id),
+di_qty number(3) ,
+di_date date
+);
+
+1.select distributer.d_name from distributer join dist_item on distributer.d_id=dist_item.di_d_id
+  where distributer.d_id in (select di_d_id from dist_item where di_i_id=5);
+
+2.select distinct(i_name) from item join dist_item on item.i_id=di_i_id where di_i_id in((
+select di_i_id from dist_item where di_qty=
+(select max(di_qty) from dist_item)));
+ 
+3.select distinct(i_name) from item join dist_item on dist_item.di_i_id = item.i_id where dist_item.di_i_id in((
+select i_id from item join dist_item on dist_item.di_i_id=item.i_id where dist_item.di_d_id=(
+select distinct(d_id) from distributer join dist_item on distributer.d_id=dist_item.di_i_id where distributer.d_name like 'ck')));
+
+4.select distinct(i_name),di_qty from item join dist_item on item.i_id=dist_item.di_i_id where di_i_id in((
+select di_i_id from dist_item where to_char(di_date,'mm-yyyy') like '06-2001'));
+
+//select di_i_id,di_qty from dist_item where to_char(di_date,'mm-yyyy') like '06-2001'
+
+5.
+
+
+                                 -------------------------day -9----------------------------------
+
+
+
+
+create table deposite(acc_no number(11) primary key,d_b_name varchar(15) references branch (b_name),d_d_bname varchar(10) ,d_amount number(10),d_adate date);
+
+create table branch (b_name varchar(15) primary key,b_city varchar(15));
+
+create table customer3(c_no number(10)primary key,c_name varchar(10),c_city varchar(10));
+
+create table borrow(b_loanno number(10) primary key,c_no number(10) references customer3 (c_no),
+b_name varchar(15) references branch (b_name),
+b_ammount number(10));
+
+-----------------insert into customer-------------
+
+insert into customer3 values (1,'ck','ahmedabad');
+insert into customer3 values (2,'kp','surat');
+insert into customer3 values (3,'vn','katch');
+insert into customer3 values (4,'jns','ghandhinagar');
+insert into customer3 values (5,'ndh','surat');
+insert into customer3 values (6,'mdr','vadodara');
+insert into customer3 values (7,'ckp','rajkot');
+insert into customer3 values (8,'ramesh','katch');
+insert into customer3 values (9,'raju','surat');
+insert into customer3 values (10,'shyam','ahmedabad');
+
+
+-------------insert into branch-----------
+
+insert into branch values('ghatlodia','ahmedabad');
+insert into branch values('sciencecity','ahmedabad');
+insert into branch values('kadodara','surat');
+insert into branch values('katargam','surat');
+insert into branch values('gurukul','ahmedabad');
+insert into branch values('chankyapuri','ahmedabad');
+insert into branch values('chanoda','rajkot');
+insert into branch values('bachau','katch');
+insert into branch values('thaltej','ahmedabad');
+insert into branch values('bodkdev','ahmedabad');
+
+
+create table deposite(acc_no number(11) primary key,c_no varchar(10),b_name varchar(15) references branch (b_name),d_amount number(10),d_adate date);
+
+-------------insert into deposite-----------
+
+insert into deposite values (36590111112,1,'ghatlodia',12000,'12-may-2016');
+insert into deposite values (36590111113,2,'gurukul',1000,'14-may-2016');
+insert into deposite values (36590111114,1,'chankyapuri',120000,'12-mar-2016');
+insert into deposite values (36590111115,3,'chanoda',15000,'12-may-2018');
+insert into deposite values (36590111116,4,'thaltej',22000,'12-jan-2020');
+insert into deposite values (36590111117,5,'thaltej',42000,'20-feb-2020');
+insert into deposite values (36590111118,5,'ghatlodia',52000,'25-feb-2020');
+insert into deposite values (36590111119,1,'bodkdev',41000,'30-may-2020');
+insert into deposite values (36590111120,2,'bachau',30000,'1-jan-2021');
+insert into deposite values (36590111121,3,'katargam',112000,'12-aug-2021');
+insert into deposite values (36590111122,10,'katargam',112000,'12-aug-2021');
+
+
+--------------insert into borrow-------------
+insert into borrow values(101,1,'thaltej',100000);
+insert into borrow values(102,1,'katargam',100000);
+insert into borrow values(103,2,'thaltej',200000);
+insert into borrow values(104,3,'bachau',300000);
+insert into borrow values(106,4,'thaltej',100000);
+insert into borrow values(108,5,'gurukul',50000);
+insert into borrow values(110,5,'bodkdev',120000);
+insert into borrow values(111,4,'thaltej',65000);
+insert into borrow values(112,5,'chanoda',850000);
+insert into borrow values(113,5,'bachau',1000000);
+insert into borrow values(114,10,'bachau',1000000);
+
+
+------------------query------------------
+1.select * from customer3 c join deposite d on c.c_no=d.c_no join borrow b on d.c_no=b.c_no where c_name like 'ck'; 
+2.select c_name from customer3 c inner join  deposite d on c.c_no=d.c_no inner join borrow b on d.c_no=b.c_no
+ where c_city like 'ahmedabad';
+ 
+select c_name from customer3 c  join  deposite d on c.c_no=d.c_no  join borrow b on d.c_no=b.c_no
+ where c_city like 'ahmedabad';
+
+select * from customer3 c join  deposite d on c.c_no=d.c_no join borrow b on d.c_no=b.c_no
+ where c_city like 'ahmedabad';
+
+
+3.select * from customer3 c join branch b on c.c_city=b.b_city;
+select distinct(c_city) from customer3 c join branch b on c.c_city=b.b_city;
+
+4.select e.name ,d.dno,d,dname from e cross join d;
+5.
+
+
+
+
+-----------------day10-----------------------
+
+create table worker (id number(10),name varchar(20),wages_per_hr number(10));
+create table job (job_id number(10),job_type varchar(10));
+create table assigned(id number(10) references worker (id),
+job_id references
+);
+
+
