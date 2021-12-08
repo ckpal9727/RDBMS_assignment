@@ -612,11 +612,10 @@ select distinct(c_city) from customer3 c join branch b on c.c_city=b.b_city;
 
 -----------------day10-----------------------
 
-
 create table worker (id number(10)primary key,name varchar(20),wages_per_hr number(10));
 create table job (job_id number(10)primary key,job_type varchar(10));
 create table assigned(w_id number(10) references worker (id),
-job_id number(10)references  job(job_id), start_date date, total_hrs number(10)
+job_id number(10)references  job(job_id), start_date date,status varchar(10), total_hrs number(10)
 );
 
 
@@ -643,20 +642,38 @@ insert into job values(3,'DESIGNER');
 insert into job values(4,'MARKETING');
 insert into job values(5,'SALES');
 
+insert into assigned values(1,1,'12-feb-2023','PAID',7);
+insert into assigned values(2,1,'12-jan-2023','PAID',7);
+insert into assigned values(3,2,'10-feb-2023','PENDING',7);
+insert into assigned values(4,2,'21-feb-2023','PENDING',5);
+insert into assigned values(5,1,'22-mar-2023','PAID',5);
+insert into assigned values(6,3,'12-may-2023','PAID',8);
+insert into assigned values(7,3,'18-jun-2023','PAID',8);
+insert into assigned values(8,4,'21-jun-2023','PENDING',8);
+insert into assigned values(9,4,'22-jun-2023','PAID',9);
+insert into assigned values(10,4,'12-jul-2023','PAID',9);
+insert into assigned values(11,5,'12-feb-2024','PENDING',4);
+insert into assigned values(12,1,'21-feb-2024','PENDING',4);
+insert into assigned values(13,1,'28-jun-2024','PAID',4);
+insert into assigned values(14,5,'29-aug-2025','PAID',3);
+insert into assigned values(15,5,'01-dec-2026','PAID',10);
+insert into assigned values(1,2,'12-feb-2023','PENDING',7);
+insert into assigned values(2,2,'12-feb-2023','PAID',7);
 
-insert into assigned values(1,1,'12-feb-2023',7);
-insert into assigned values(2,1,'12-jan-2023',7);
-insert into assigned values(3,2,'10-feb-2023',7);
-insert into assigned values(4,2,'21-feb-2023',5);
-insert into assigned values(5,1,'22-mar-2023',5);
-insert into assigned values(6,3,'12-may-2023',8);
-insert into assigned values(7,3,'18-jun-2023',8);
-insert into assigned values(8,4,'21-jun-2023',8);
-insert into assigned values(9,4,'22-jun-2023',9);
-insert into assigned values(10,4,'12-jul-2023',9);
-insert into assigned values(11,5,'12-feb-2024',4);
-insert into assigned values(12,1,'21-feb-2024',4);
-insert into assigned values(13,1,'28-jun-2024',4);
-insert into assigned values(14,5,'29-aug-2025',3);
-insert into assigned values(15,5,'01-dec-2026',10);
+1.select id  from worker w join assigned a on w.id=a.w_id where job_id=1
+intersect 
+select id  from worker w join assigned a on w.id=a.w_id where job_id=2; 
+2.
+select id  from worker w join assigned a on w.id=a.w_id where job_id=1
+intersect 
+select id  from worker w join assigned a on w.id=a.w_id where job_id<>2;
+3.
+select id from worker w join assigned a on w.id=a.w_id where total_hrs>6 
+intersect 
+select id from worker w join assigned a on w.id=a.w_id where status='PENDING'
+union
+select id from worker w join assigned a on w.id=a.w_id where total_hrs<6 
+intersect
+select id from worker w join assigned a on w.id=a.w_id where status='PAID';
+
 
