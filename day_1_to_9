@@ -677,3 +677,36 @@ intersect
 select id from worker w join assigned a on w.id=a.w_id where status='PAID';
 
 
+----------------------creating table FY AND SY RANKER----------
+
+create table FY(eno number(10)primary key,fname varchar(20),spi number(10));
+create table SY(eno number(10)primary key,sname varchar(20),spi number(10));
+
+insert into FY values (1,'CK',9.8);
+insert into FY values (2,'KP',9.8);
+insert into FY values (3,'VN',9.7);
+insert into FY values (4,'MR',9.6);
+insert into FY values (5,'NDH',9.5);
+insert into FY values (6,'MDR',9.5);
+insert into FY values (7,'DPK',9.4);
+insert into FY values (8,'NVB',9.3);
+insert into FY values (9,'SBR',8.8);
+insert into FY values (10,'SDK',8.0);
+
+
+insert into SY values (1,'KP',9.8);
+insert into SY values (2,'CK',9.7);
+insert into SY values (3,'NDH',9.6);
+insert into SY values (4,'MDR',9.5);
+insert into SY values (5,'VN',9.5);
+insert into SY values (6,'NVB',9.4);
+insert into SY values (7,'HMGI',9.1);
+insert into SY values (8,'MRL',9.0);
+insert into SY values (9,'ASTK',8.9);
+insert into SY values (10,'SHYM',8.89);
+
+1.
+select fname from FY f join SY s on f.eno=s.eno
+intersect
+select sname from SY s join FY f on s.eno=f.eno;
+
