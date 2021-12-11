@@ -756,3 +756,40 @@ insert into emp values(5,'jn','sales');
 insert into emp values(6,'mr','sales');
 insert into emp values(7,'sn','sales');
 
+1.
+create view emp_vi as select * from emp;
+2.
+create or replace view emp_view as (select (id)i,(name)n from employee);
+3.
+select ename from emp_vi where dept in('marketing','sales');
+4.
+update emp_vi set ename='nj' where ename='jn';
+5.
+delete from emp_vi where ename='jn';
+6.
+drop view emp_vi ;
+
+
+create table branch(bno number(10) primary key,bname varchar(10));
+create table address (addno number(10)primary key,bno number(10)references branch(bno),btype varchar(15),
+add1 varchar(30),add2 varchar(30),city varchar(20),state varchar(10),pincode number(10));
+
+
+insert into branch values(1,'ghatlodia');
+insert into branch values(2,'satadhar');
+insert into branch values(3,'gurukul');
+insert into branch values(4,'sola');
+insert into branch values(5,'sciencity');
+
+insert into address values(1,1,'residential','satadhar','templ saibaba','ahmedabad','gujrat',380061);
+insert into address values(2,1,'commercial','satadhar','pavapuri','ahmedabad','gujrat',380061);
+insert into address values(3,2,'residential','gurukul','templ saibaba','ahmedabad','gujrat',380061);
+insert into address values(4,3,'residential','ghatlodia','templ saibaba','ahmedabad','gujrat',380061);
+insert into address values(5,3,'commercial','ghatlodia','templ saibaba','ahmedabad','gujrat',380061);
+insert into address values(6,4,'commercial','sola','templ saibaba','ahmedabad','gujrat',380061);
+insert into address values(7,4,'residential','sciencity','templ saibaba','ahmedabad','gujrat',380061);
+insert into address values(8,5,'commercial','sciencity','templ saibaba','ahmedabad','gujrat',380061);
+insert into address values(9,2,'residential','sola','templ saibaba','ahmedabad','gujrat',380061);
+insert into address values(10,1,'commercial','gurukul','templ saibaba','ahmedabad','gujrat',380061);
+
+
