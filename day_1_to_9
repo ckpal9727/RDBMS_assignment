@@ -739,3 +739,20 @@ select fname from FY join SY on FY.eno=SY.eno where fname not in(
 intersect
 select sname from FY f join SY s on s.eno=f.eno
 )) ;
+
+
+
+--------------------------day-11-------------------------------
+
+create table emp (eno number(10)primary key ,
+ename varchar(10),dept varchar(10)
+);
+
+insert into emp values(1,'ck','hr');
+insert into emp values (2,'kp','marketing');
+insert into emp values(3,'vn','sales');
+insert into emp values(4,'shyam','hr');
+insert into emp values(5,'jn','sales');
+insert into emp values(6,'mr','sales');
+insert into emp values(7,'sn','sales');
+
