@@ -793,3 +793,55 @@ insert into address values(9,2,'residential','sola','templ saibaba','ahmedabad',
 insert into address values(10,1,'commercial','gurukul','templ saibaba','ahmedabad','gujrat',380061);
 
 
+///here is remaning queries///
+
+
+------------------------day13----------------
+DECLARE
+   var1 integer := 20;
+   var2 integer := 40;
+   var3 integer;
+   var4 real;
+BEGIN
+   var3 := var1 + var2;
+   dbms_output.put_line('Value of var3: ' || var3);
+   var4 := 50.0/3.0;
+   dbms_output.put_line('Value of var4: ' || var4);
+END;
+
+
+1.
+begin
+	dbms_output.put_line('hii');
+end
+2.
+declare 
+ var1 date:=sysdate();
+begin
+	dbms_output.put_line('hii today is '|| var1);
+end
+3.
+	declare 
+	 name varchar2(20);
+	 sub1 number(3);
+	 sub2 number(3);
+	 sub3 number(3);
+	 total number(3);
+	 per number(5);
+	begin
+		name := '&name';
+		sub1:=&sub1;
+		sub2:=&sub2;
+		sub3:=&sub3;
+		total:=sub1+sub2+sub3;
+		per:= total*100/300;
+		dbms_output.put_line(name);
+		dbms_output.put_line(sub1);
+		dbms_output.put_line(sub2);
+		dbms_output.put_line(sub3);
+		dbms_output.put_line(total);
+		dbms_output.put_line(per);
+	end;
+	/
+
+
