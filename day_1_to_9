@@ -843,5 +843,27 @@ end
 		dbms_output.put_line(per);
 	end;
 	/
+	
+6.
+declare
+	n1 number:=12;
+	n2 number:=13;
+	n3 number:=10;
+begin
+	if (n1>n2)
+	then 
+		dbms_output.put_line('The number greater'|| n1 );
+		if(n1>n3)
+			then
+				dbms_output.put_line('The number greater'|| n1 );
+		end if;
+	elsif(n2>n3)
+	then
+		dbms_output.put_line('The number greater'|| n2 );			
+	else
+		dbms_output.put_line('The number greater'|| n3 );
+	end if;
+end;
+/
 
 
