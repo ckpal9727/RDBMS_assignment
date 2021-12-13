@@ -843,7 +843,26 @@ end
 		dbms_output.put_line(per);
 	end;
 	/
-	
+
+4.
+declare
+	ans number(3);
+	n1 number:=4;
+	n2 number:=0;
+	ex1 exception ;
+begin
+	if(n2<=0)
+	then
+	raise ex1;
+	end if;
+	ans:=n1/n2;
+	dbms_output.put_line(ans);
+exception
+	when ex1 then dbms_output.put_line('you entered wrong 0or less then 0');
+end;
+/
+
+
 6.
 declare
 	n1 number:=12;
