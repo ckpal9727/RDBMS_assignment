@@ -913,5 +913,21 @@ begin
 end;
 /
 
+https://github.com/ckpal9727/RDBMS_assignment
+
+DECLARE 
+   a number(2) := 10; 
+BEGIN 
+   loop exit when a=40;
+   if (mod(a,3)=0)
+		then 
+			dbms_output.put_line(a);
+		end if; 
+   a:=a+1;
+   END LOOP; 
+END; 
+/ 
+3.
+
 
 
