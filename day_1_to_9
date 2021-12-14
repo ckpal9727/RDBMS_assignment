@@ -885,4 +885,33 @@ begin
 end;
 /
 
+===========================day 14 by kalpesh====================================
+================================================================================
+      
+declare
+	num number(2):=4;
+	c number(2);
+	i number:=0;
+
+begin	
+	c:=0;		
+	for i in 1..4
+	loop
+		if(mod(num,i)=0)
+		then
+			c:=c+1;
+		end if;
+	end loop;
+
+	if(c=2)
+	then
+		dbms_output.put_line('prime number');		
+	else
+		dbms_output.put_line(' not prime number');		
+	end if;
+
+end;
+/
+
+
 
