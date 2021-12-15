@@ -944,4 +944,37 @@ end;
 /
 
 
+---------------------------------day 15------------------------------
+1.
+declare
+	o_id number(10);
+	products number(10);
+begin
+	select orderDetail_id,count(prod_id) into o_id,products from orderDetail group by orderDetail_id having orderDetail_id=3;
+	dbms_output.put_line('id is '||o_id ||'and '||products);
+end;
+//select * from product;
+2.
+declare
+p_id number;
+begin
+	p_id:=&pid;
+update product set price=price+100 where prod_id=p_id;
+end;
+/
+3.
+declare 
+c number;
+begin
+c:=&cat_id;
+delete from product  where cat_id=c;
+dbms_output.put_line(c);
+end;
+/
+4.
+declare 
+begin
+insert into product values ('&prod_id','&prod_name','&suplier_id','&cat_id','&unit',&price); 
+end;
+
 
