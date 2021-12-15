@@ -976,5 +976,17 @@ declare
 begin
 insert into product values ('&prod_id','&prod_name','&suplier_id','&cat_id','&unit',&price); 
 end;
+5.
+declare
+sid number;
+s_id number;
+deliverd number;
+begin
+sid:=&suplier;
+select suplier_id,sum(quantity) into s_id ,deliverd from product p join orderDetail d on p.prod_id=d.orderDetail_id 
+group by suplier_id having suplier_id=sid;
+dbms_output.put_line(s_id ||'   '||deliverd); 
+end;
+/
 
 
