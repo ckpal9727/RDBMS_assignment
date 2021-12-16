@@ -1011,3 +1011,15 @@ begin
 end;
 /
 
+
+3.
+declare
+cursor ctotal is select top 3 PERCENT name from student1 order by total desc;
+begin
+	for c_total in ctotal
+	loop
+		dbms_output.put('name');
+		dbms_output.put_line(c_total.name);
+	end loop;
+end;
+
