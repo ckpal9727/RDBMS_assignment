@@ -998,14 +998,19 @@ end;
 
 2.
 declare
-cursor c_total is select total  from student1; 
+cursor c_total is select total,name  from student; 
 begin
 	for ctotal in c_total
 	loop
-		if ctotal.total > 290
+		if ctotal.total > 190 
 		then
-			update student1 set grade=70;
-			dbms_output.put_line('h');
+			update student set grade = 70;
+			dbms_output.put_line(ctotal.total|| ctotal.name);
+		elsif ctotal.total > 150 
+		then
+			update student set grade =50;
+			dbms_output.put_line(ctotal.total|| ctotal.name);
+			
 		end if;
 	end loop;
 end;
@@ -1013,13 +1018,22 @@ end;
 
 
 3.
+
+3.
 declare
-cursor ctotal is select top 3 PERCENT name from student1 order by total desc;
+ s_name student.name%type;
+ s_total student.total%type;
+ counter number(3):=0;
+ cursor c_top is select name,total from student order by total desc;
 begin
-	for c_total in ctotal
-	loop
-		dbms_output.put('name');
-		dbms_output.put_line(c_total.name);
+	open c_top ;
+	loop 
+	fetch c_top into s_name,s_total ;
+	counter:=counter+1;
+	dbms_output.put_line(s_name||s_total);
+	exit when counter=3;
 	end loop;
+	close c_top;
 end;
+/
 
