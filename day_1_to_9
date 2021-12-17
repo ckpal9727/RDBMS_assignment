@@ -1042,3 +1042,15 @@ begin
 end;
 /
 
+
+//---2
+create table faculty(id number(10) primary key,name varchar(20));
+
+insert into faculty values('&id','&name');
+
+declare
+sal faculty.salary%type; 
+begin
+sal:=&enter_salary;
+insert into faculty 
+end;
