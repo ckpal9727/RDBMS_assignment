@@ -988,7 +988,12 @@ group by suplier_id having suplier_id=sid;
 dbms_output.put_line(s_id ||'   '||deliverd); 
 end;
 /
+---------------------------day 16--------------------------------
+create table student (id number(10) primary key,name varchar(20),sub1 number(10),sub2 number(10),total number(10),grade number(10));
 
+insert into student values('&id','&name','&sub1','&sub2','&total','&grade');
+
+select * from student;
 
 1.
 declare
