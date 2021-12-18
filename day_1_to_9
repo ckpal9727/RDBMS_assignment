@@ -1093,3 +1093,26 @@ exception
 		dbms_output.put_line('low salary');
 end;
 /
+
+
+//------------------------3--------------------
+create table supplier(sid number(10)primary key,sname varchar(20),contactnum number(10));
+create table parts(pid number(10)primary key,pname varchar(20),color varchar(20),unitrate number(10));
+create table catelog (sid number(10) references supplier(sid),pid number(10) references parts(pid),qty number(10));
+
+1.
+declare 
+s_id supplier.sid%type;
+cursor c1(s_id supplier.sid%type) is select p.pid,p.pname,c.qty,p.unitrate,s.sname from parts p,catelog c,supplier s where p.pid=c.pid or s.sid=c.sid;
+begin
+s_id:=&s_id;
+dbms_output.put('PART ID'||'PART NAME'||'QUANTITY'||'UNIT PRICE'||'TOTAL');
+for c_sup in c1
+loop
+	dbms_output.put_line(c_sup.pid||c_sup.pname||c_sup.qty||c_sup.unitrate||c_sup.sname||c_sup.qty*c_sup.unitrate);
+end loop;
+end;
+/
+
+
+
