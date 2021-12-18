@@ -1003,18 +1003,20 @@ end;
 
 2.
 declare
-cursor c_total is select total,name  from student; 
+cursor c_total is select id, total,name  from student; 
 begin
 	for ctotal in c_total
 	loop
 		if ctotal.total > 190 
 		then
-			update student set grade = 70;
+			update student set grade = 70 where id = ctotal.id;
 			dbms_output.put_line(ctotal.total|| ctotal.name);
 		elsif ctotal.total > 150 
 		then
-			update student set grade =50;
+			update student set grade = 50 where id = ctotal.id;
 			dbms_output.put_line(ctotal.total|| ctotal.name);
+		else
+			update student set grade = 30 where id = ctotal.id;
 			
 		end if;
 	end loop;
@@ -1022,7 +1024,7 @@ end;
 /
 
 
-3.
+
 
 3.
 declare
@@ -1044,13 +1046,50 @@ end;
 
 
 //---2
-create table faculty(id number(10) primary key,name varchar(20));
+create table faculty1(id number(10) primary key,name varchar(20),dept varchar(20),sal number(10),bonus number(10));
 
-insert into faculty values('&id','&name');
+insert into faculty values('&id','&name',);
+1.
+/*
+declare 
+f_id faculty1.id%type;
+f_sal faculty1.sal%type;
+f_dept faculty1.dept%type;
+ex1 exception;
 
-declare
-sal faculty.salary%type; 
+cursor cbonus is select id,sal,dept from faculty1;
 begin
-sal:=&enter_salary;
-insert into faculty 
+	open cbonus;
+		fetch cbonus into f_id,f_sal,f_dept;
+		loop 
+			if f_dept like 'mca'
+			then
+				update faculty1 set bonus=(sal*5)/100 where id=f_id;
+			end if;
+			exit when cbonus%notfound;
+		end loop;
+	close cbonus;
 end;
+*/
+
+1.
+declare 
+ex1 exception;
+cursor cbonus is select id,sal,dept from faculty1;
+begin
+		for c_bonus in cbonus
+		loop
+			if c_bonus.dept like 'mca'
+			then
+				if c_bonus.sal <25000
+				then
+					raise ex1;
+				end if;
+				update faculty1 set bonus=(sal*5)/100 where id=c_bonus.id;
+			end if;
+		end loop;
+exception 
+	when ex1 then
+		dbms_output.put_line('low salary');
+end;
+/
